@@ -1,9 +1,0 @@
-# ninja log v6
-0	133	1744439003572798010	bin-int/Release/linux-x86_64/Sparkle/engine.o	44d044867f0b7473
-4	142	1744439003572798010	bin-int/Release/linux-x86_64/Application/main.o	56707ce85d9873db
-133	198	1744439003702797986	bin/Release/linux-x86_64/Sparkle/libSparkle.a	8222fded952cb730
-198	401	1744439003762797974	bin/Release/linux-x86_64/Application/Application	1bd0779898c3a63
-401	443	1744439003962797936	postbuild_Application_Release	759b25c263ace361
-3	204	1744439186282761723	bin-int/Release/linux-x86_64/Application/main.o	56707ce85d9873db
-205	363	1744439186482761685	bin/Release/linux-x86_64/Application/Application	1bd0779898c3a63
-363	368	1744439186642761654	postbuild_Application_Release	759b25c263ace361
