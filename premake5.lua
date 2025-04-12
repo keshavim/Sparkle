@@ -36,7 +36,7 @@ workspace "Sparkle"
     filter{}
 
 
-    configurations { "Release", "Debug" }
+    configurations { "Debug", "Releasee" }
 
     outputdir = "%{cfg.buildcfg}/%{cfg.system}-%{cfg.architecture}/"
 
