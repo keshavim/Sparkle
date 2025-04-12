@@ -1,0 +1,15 @@
+# solution build file
+# generated with premake ninja
+
+# build projects
+subninja Sparkle/build_Sparkle_Release.ninja
+subninja Sparkle/build_Sparkle_Debug.ninja
+subninja Application/build_Application_Release.ninja
+subninja Application/build_Application_Debug.ninja
+
+# targets
+build Debug: phony Sparkle_Debug Application_Debug
+build Release: phony Sparkle_Release Application_Release
+
+# default target
+default Application_Release
