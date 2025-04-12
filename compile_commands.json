@@ -2,10 +2,61 @@
   {
     "arguments": [
       "/usr/sbin/g++",
+      "-fdiagnostics-color=always",
+      "-fmessage-length=80",
+      "-fno-elide-type",
+      "-fdiagnostics-show-template-tree",
       "-m64",
       "-O2",
       "-std=c++20",
       "-DSPRK_RELEASE",
+      "-ISparkle/vendor/spdlog/include",
+      "-x",
+      "c++",
+      "-c",
+      "-o",
+      "bin-int/Release/linux-x86_64/Sparkle/log.o",
+      "Sparkle/src/Core/log.cpp"
+    ],
+    "directory": "/home/keshavi/dev/cpp/Sparkle",
+    "file": "/home/keshavi/dev/cpp/Sparkle/Sparkle/src/Core/log.cpp",
+    "output": "/home/keshavi/dev/cpp/Sparkle/bin-int/Release/linux-x86_64/Sparkle/log.o"
+  },
+  {
+    "arguments": [
+      "/usr/sbin/g++",
+      "-fdiagnostics-color=always",
+      "-fmessage-length=80",
+      "-fno-elide-type",
+      "-fdiagnostics-show-template-tree",
+      "-m64",
+      "-O2",
+      "-std=c++20",
+      "-DSPRK_RELEASE",
+      "-ISparkle/vendor/spdlog/include",
+      "-x",
+      "c++",
+      "-c",
+      "-o",
+      "bin-int/Release/linux-x86_64/Sparkle/engine.o",
+      "Sparkle/src/Core/engine.cpp"
+    ],
+    "directory": "/home/keshavi/dev/cpp/Sparkle",
+    "file": "/home/keshavi/dev/cpp/Sparkle/Sparkle/src/Core/engine.cpp",
+    "output": "/home/keshavi/dev/cpp/Sparkle/bin-int/Release/linux-x86_64/Sparkle/engine.o"
+  },
+  {
+    "arguments": [
+      "/usr/sbin/g++",
+      "-fdiagnostics-color=always",
+      "-fmessage-length=80",
+      "-fno-elide-type",
+      "-fdiagnostics-show-template-tree",
+      "-m64",
+      "-O2",
+      "-std=c++20",
+      "-DSPRK_RELEASE",
+      "-ISparkle/vendor/spdlog/include",
       "-ISparkle/src",
       "-x",
       "c++",
@@ -17,23 +68,5 @@
     "directory": "/home/keshavi/dev/cpp/Sparkle",
     "file": "/home/keshavi/dev/cpp/Sparkle/Application/src/main.cpp",
     "output": "/home/keshavi/dev/cpp/Sparkle/bin-int/Release/linux-x86_64/Application/main.o"
-  },
-  {
-    "arguments": [
-      "/usr/sbin/g++",
-      "-m64",
-      "-O2",
-      "-std=c++20",
-      "-DSPRK_RELEASE",
-      "-x",
-      "c++",
-      "-c",
-      "-o",
-      "bin-int/Release/linux-x86_64/Sparkle/engine.o",
-      "Sparkle/src/Core/engine.cpp"
-    ],
-    "directory": "/home/keshavi/dev/cpp/Sparkle",
-    "file": "/home/keshavi/dev/cpp/Sparkle/Sparkle/src/Core/engine.cpp",
-    "output": "/home/keshavi/dev/cpp/Sparkle/bin-int/Release/linux-x86_64/Sparkle/engine.o"
   }
 ]

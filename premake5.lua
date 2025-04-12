@@ -24,9 +24,18 @@ newaction {
 workspace "Sparkle"
     
     architecture("x86_64")
-    cppdialect("C++20")
-    staticruntime("on")
-   
+
+    filter { "toolset:gcc or clang" }
+     -- Add custom compiler flags
+    buildoptions {
+        "-fdiagnostics-color=always",  -- Enable colored diagnostics
+        "-fmessage-length=80",        -- Set message length to 80 characters
+        "-fno-elide-type",            -- Disable type elision in error messages
+        "-fdiagnostics-show-template-tree" -- Show template mismatches as a tree
+    }
+    filter{}
+
+
     configurations { "Release", "Debug" }
 
     outputdir = "%{cfg.buildcfg}/%{cfg.system}-%{cfg.architecture}/"
@@ -35,6 +44,8 @@ workspace "Sparkle"
       location("Sparkle")
       kind("StaticLib")
       language("C++")
+      staticruntime("on")
+      cppdialect("C++20")
 
       targetdir("bin/" .. outputdir .. "%{prj.name}")
       objdir("bin-int/" .. outputdir .. "%{prj.name}")
@@ -45,7 +56,9 @@ workspace "Sparkle"
         "%{prj.name}/src/*.h",
       })
 
-      includedirs({})
+      includedirs({
+          "%{prj.name}/vendor/spdlog/include"
+      })
 
       filter("system:windows")
           systemversion("latest")
@@ -59,21 +72,26 @@ workspace "Sparkle"
           defines("SPRK_RELEASE")
           runtime("Release")
           optimize("on")
+      filter{}
 
     project("Application")
         location("Application")
         kind("ConsoleApp")
         language("C++")
+        cppdialect("C++20")
+        staticruntime("on")
 
         targetdir("bin/" .. outputdir .. "%{prj.name}")
         objdir("bin-int/" .. outputdir .. "%{prj.name}")
 
-        files({
+        files
+        ({
           "%{prj.name}/src/**.h",
           "%{prj.name}/src/**.cpp",
         })
 
         includedirs({
+          "Sparkle/vendor/spdlog/include",
           "Sparkle/src"
         })
 
@@ -93,7 +111,7 @@ workspace "Sparkle"
             defines("SPRK_RELEASE")
             runtime("Release")
             optimize("on")
-
+        filter{}
 
         
         postbuildcommands {

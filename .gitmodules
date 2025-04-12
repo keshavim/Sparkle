@@ -1,0 +1,3 @@
+[submodule "Sparkle/vendor/spdlog"]
+	path = Sparkle/vendor/spdlog
+	url = https://github.com/gabime/spdlog.git
