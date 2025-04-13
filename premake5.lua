@@ -73,7 +73,6 @@ workspace "Sparkle"
 
       links {
         "Glfw",
-        "GL",
     
       }
 
@@ -83,7 +82,7 @@ workspace "Sparkle"
         }
       filter("system:linux")
         links {
-          "GL"
+          "GL",
         "X11",
         "dl",
         "pthread",
