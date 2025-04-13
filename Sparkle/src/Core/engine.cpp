@@ -1,3 +1,5 @@
+#include "sprkpch.h"
+
 #include "engine.h"
 
 #include "event.h"
@@ -6,22 +8,24 @@
 namespace Sparkle {
 
 Engine::Engine() {
-  // Constructor implementation
+m_window = std::unique_ptr<Window>(Window::create()); 
 }
 
 Engine::~Engine() {
   // Destructor implementation
 }
 
-bool test(Event& e){
+bool test(Event &e) {
   SPRK_INFO("dispatch {}", e.toString());
   return true;
 }
 
 void Engine::Run() {
-  KeyPressedEvent e(65, false);
 
-  EventDispatcher dis(e);
-  dis.dispatch<KeyPressedEvent>(test);
+  while(m_window){
+ m_window->onUpdate(); 
+  }
+
 }
+
 } // namespace Sparkle

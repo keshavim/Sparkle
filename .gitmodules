@@ -1,3 +1,6 @@
 [submodule "Sparkle/vendor/spdlog"]
 	path = Sparkle/vendor/spdlog
 	url = https://github.com/gabime/spdlog.git
+[submodule "Sparkle/vendor/Glfw"]
+	path = Sparkle/vendor/Glfw
+	url = https://github.com/keshavim/glfw.git

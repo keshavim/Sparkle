@@ -1,5 +1,4 @@
 
-require "premake-ninja/ninja"
 
 
 newaction {
@@ -7,13 +6,12 @@ newaction {
     description = "Clean all build files and directories",
     execute = function()
         print("Cleaning build files...")
+       os.execute("make clean")
         os.rmdir("bin")
         os.rmdir("bin-int")
+        
 
-         -- Remove Ninja build files
-        os.execute("find . -name '*.ninja' -delete") -- Run Ninja's clean tool
-        os.remove(".ninja_log")      -- Ninja's log file
-        os.remove(".ninja_deps")     -- Ninja's dependency file
+        os.execute("find . -name 'Makefile' -delete")
 
 
         print("Clean complete!")
@@ -21,24 +19,31 @@ newaction {
 }
 
 
+
 workspace "Sparkle"
-    
     architecture("x86_64")
 
-    filter { "toolset:gcc or clang" }
-     -- Add custom compiler flags
-    buildoptions {
-        "-fdiagnostics-color=always",  -- Enable colored diagnostics
-        "-fmessage-length=80",        -- Set message length to 80 characters
-        "-fno-elide-type",            -- Disable type elision in error messages
-        "-fdiagnostics-show-template-tree" -- Show template mismatches as a tree
-    }
-    filter{}
+    systemversion("latest")
 
+    filter("system:windows")
+        defines("SPRK_PLATFORM_WINDOWS")
+    filter("system:linux")
+        toolset "clang"
+        defines("SPRK_PLATFORM_LINUX")
+    filter{}
 
     configurations { "Debug", "Releasee" }
 
     outputdir = "%{cfg.buildcfg}/%{cfg.system}-%{cfg.architecture}/"
+
+
+    --include dirs relitive to route 
+    IncludeDirs = {}
+    IncludeDirs["Glfw"] = "Sparkle/vendor/Glfw/inlcude"
+
+
+    include "Sparkle/vendor/Glfw"
+
 
     project("Sparkle")
       location("Sparkle")
@@ -47,21 +52,50 @@ workspace "Sparkle"
       staticruntime("on")
       cppdialect("C++20")
 
+
+
       targetdir("bin/" .. outputdir .. "%{prj.name}")
       objdir("bin-int/" .. outputdir .. "%{prj.name}")
+
+        pchheader "sprkpch.h"
+        pchsource "%{prj.name}/src/sprkpch.cpp"
 
       files({
         "%{prj.name}/src/**.h",
         "%{prj.name}/src/**.cpp",
-        "%{prj.name}/src/*.h",
       })
 
       includedirs({
-          "%{prj.name}/vendor/spdlog/include"
+          "%{prj.name}/src",
+          "%{prj.name}/vendor/spdlog/include",
+          "%{IncludeDirs.Glfw}"
       })
 
+      links {
+        "Glfw",
+        "GL",
+    
+      }
+
       filter("system:windows")
-          systemversion("latest")
+        links {
+          "opengl32.lib"
+        }
+      filter("system:linux")
+        links {
+          "GL"
+        "X11",
+        "dl",
+        "pthread",
+        "m"
+        }
+
+      -- filter { "toolset:gcc or clang" }
+      --   buildoptions {
+      --       "-Wall",
+      --       "-Wextra",
+      --       "-fdiagnostics-color=always",
+      --   }
 
       filter("configurations:Debug")
           defines("SPRK_DEBUG")
@@ -97,10 +131,16 @@ workspace "Sparkle"
 
         links({
           "Sparkle",
+          "Glfw"
         })
 
-        filter("system:windows")
-            systemversion("latest")
+
+        -- filter { "toolset:gcc or clang" }
+        --   buildoptions {
+        --       "-Wall",
+        --       "-Wextra",
+        --       "-fdiagnostics-color=always",
+        --   }
 
         filter("configurations:Debug")
             defines("SPRK_DEBUG")
@@ -115,6 +155,6 @@ workspace "Sparkle"
 
         
         postbuildcommands {
-            ("bin/" .. outputdir .. "%{prj.name}/%{prj.name}")
+            "%{wks.location}/bin/" .. outputdir .. "/%{prj.name}/%{prj.name}"
         }
 
