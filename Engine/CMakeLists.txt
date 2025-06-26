@@ -24,7 +24,11 @@ file(GLOB_RECURSE SOURCES src/*.cpp)
 
 # Create executable
 add_executable(Engine ${SOURCES}
-        include/log.h)
+        include/log.h
+        include/window.h
+        src/window.cpp
+        include/engine.h
+        src/engine.cpp)
 target_precompile_headers(Engine PRIVATE include/base.h)
 
 # Link SDL3 statically
