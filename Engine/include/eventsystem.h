@@ -25,6 +25,7 @@ namespace Sparkle {
 
     private:
         std::unordered_map<EventType, EventCallbackFn> callbacks_;
+        // Dispatch the event to the registered callback for its type.
         void dispatch(Event& event);
     };
 

@@ -20,6 +20,7 @@
 #include <type_traits>
 #include <chrono>
 #include <thread>
+#include <format>
 
 #include <cassert>
 #include <cmath>

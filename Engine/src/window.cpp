@@ -14,23 +14,23 @@ namespace Sparkle {
         shutdown();
     }
 
-    bool Window::init(const std::optional<WindowProps>& props) {
+    bool Window::init(const std::optional<WindowData>& data) {
         if (!SDL_Init(SDL_INIT_VIDEO)) {
             LOG_ERROR("SDL_Init Error: {}\n", SDL_GetError());
             return false;
         }
-        if (props) {
-            m_props = *props;
+        if (data) {
+            m_data = *data;
         }
         u32 flags = 0;
-        if (m_props.resizable){
+        if (m_data.resizable){
             flags |= SDL_WINDOW_RESIZABLE;
         }
-        if (m_props.fullscreen) {
+        if (m_data.fullscreen) {
             flags |= SDL_WINDOW_FULLSCREEN;
         }
 
-        m_window = SDL_CreateWindow(m_props.title.c_str(), m_props.width, m_props.height, flags);
+        m_window = SDL_CreateWindow(m_data.title.c_str(), m_data.width, m_data.height, flags);
         if (!m_window) {
             LOG_ERROR("SDL_CreateWindow Error: {}\n", SDL_GetError());
             SDL_Quit();
@@ -45,6 +45,5 @@ namespace Sparkle {
             SDL_DestroyWindow(m_window);
             m_window = nullptr;
         }
-        SDL_Quit();
     }
 }

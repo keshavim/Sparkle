@@ -8,6 +8,7 @@
 #include "base.h"
 #include "window.h"
 #include "eventsystem.h"
+#include "input_system.h"
 
 namespace Sparkle {
     class Engine {
@@ -30,6 +31,9 @@ namespace Sparkle {
         Window& get_window() { return m_window; }
 
     private:
+        //create defaule callbacks for all events
+        void register_events();
+
         Window m_window;
         EventSystem m_event_system;
         bool m_is_running;

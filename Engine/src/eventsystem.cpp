@@ -48,22 +48,22 @@ namespace Sparkle {
                     break;
                 }
                 case SDL_EVENT_KEY_DOWN: {
-                    KeyDownEvent event(sdl_event.key.key, sdl_event.key.repeat != 0);
+                    KeyDownEvent event(static_cast<Key>(sdl_event.key.scancode), sdl_event.key.repeat != 0);
                     dispatch(event);
                     break;
                 }
                 case SDL_EVENT_KEY_UP: {
-                    KeyUpEvent event(sdl_event.key.key);
+                    KeyUpEvent event(static_cast<Key>(sdl_event.key.scancode));
                     dispatch(event);
                     break;
                 }
                 case SDL_EVENT_MOUSE_BUTTON_DOWN: {
-                    MouseButtonDownEvent event(sdl_event.button.button, sdl_event.button.x, sdl_event.button.y);
+                    MouseButtonDownEvent event(static_cast<MouseButton>(sdl_event.button.button), sdl_event.button.x, sdl_event.button.y);
                     dispatch(event);
                     break;
                 }
                 case SDL_EVENT_MOUSE_BUTTON_UP: {
-                    MouseButtonUpEvent event(sdl_event.button.button, sdl_event.button.x, sdl_event.button.y);
+                    MouseButtonUpEvent event(static_cast<MouseButton>(sdl_event.button.button), sdl_event.button.x, sdl_event.button.y);
                     dispatch(event);
                     break;
                 }

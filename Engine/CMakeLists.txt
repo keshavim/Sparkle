@@ -32,7 +32,10 @@ add_executable(Engine ${SOURCES}
         include/pch.h
         include/eventsystem.h
         src/eventsystem.cpp
-        include/events.h)
+        include/events.h
+        include/input_codes.h
+        include/input_system.h
+        src/input_system.cpp)
 target_precompile_headers(Engine PRIVATE include/pch.h)
 
 # Link SDL3 statically
