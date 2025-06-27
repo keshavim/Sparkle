@@ -11,7 +11,6 @@ public:
 protected:
     void on_update(f32 delta_time) override {
         // Game logic goes here
-        LOG_INFO("testgame update, delta_time: {}", delta_time);
     }
 };
 

@@ -29,7 +29,10 @@ add_executable(Engine ${SOURCES}
         src/window.cpp
         include/engine.h
         src/engine.cpp
-        include/pch.h)
+        include/pch.h
+        include/eventsystem.h
+        src/eventsystem.cpp
+        include/events.h)
 target_precompile_headers(Engine PRIVATE include/pch.h)
 
 # Link SDL3 statically

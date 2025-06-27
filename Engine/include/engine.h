@@ -7,6 +7,7 @@
 
 #include "base.h"
 #include "window.h"
+#include "eventsystem.h"
 
 namespace Sparkle {
     class Engine {
@@ -30,6 +31,7 @@ namespace Sparkle {
 
     private:
         Window m_window;
+        EventSystem m_event_system;
         bool m_is_running;
     };
 }

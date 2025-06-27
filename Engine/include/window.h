@@ -28,20 +28,23 @@ namespace Sparkle {
 
         // Window API
         bool init(const std::optional<WindowProps> &props);
-        void poll_events();
         void shutdown();
 
         // Accessors (defined inline)
         [[nodiscard]] SDL_Window* get_sdl_window() const { return m_window; }
-        [[nodiscard]] bool should_close() const { return m_window_should_close; }
-        const WindowProps& get_props() { return m_props; }
-        void set_props(const WindowProps& props) { m_props = props; }
+        void should_close(bool close) { m_should_close = close; }
+
+        WindowProps& get_props() { return m_props; }
+        void on_resize(const i32 new_width, const i32 new_height) {
+            m_props.width = new_width;
+            m_props.height = new_height;
+        }
 
 
 
     private:
         SDL_Window* m_window;
-        bool m_window_should_close;
+        bool m_should_close;
         WindowProps m_props;
     };
 }

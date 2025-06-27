@@ -7,7 +7,7 @@
 #include "window.h"
 namespace Sparkle {
     Window::Window()
-        : m_window(nullptr), m_window_should_close(false) {
+        : m_window(nullptr), m_should_close(false) {
     }
 
     Window::~Window() {
@@ -36,17 +36,8 @@ namespace Sparkle {
             SDL_Quit();
             return false;
         }
-        m_window_should_close = false;
+        m_should_close = false;
         return true;
-    }
-
-    void Window::poll_events() {
-        SDL_Event event;
-        while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_EVENT_QUIT) {
-                m_window_should_close = true;
-            }
-        }
     }
 
     void Window::shutdown() {
