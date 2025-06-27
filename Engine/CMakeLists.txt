@@ -24,18 +24,22 @@ file(GLOB_RECURSE SOURCES src/*.cpp)
 
 # Create executable
 add_executable(Engine ${SOURCES}
-        include/log.h
-        include/window.h
+        include/Sparkle/log.h
+        include/Sparkle/window.h
         src/window.cpp
-        include/engine.h
+        include/Sparkle/engine.h
         src/engine.cpp
         include/pch.h
-        include/eventsystem.h
+        include/Sparkle/eventsystem.h
         src/eventsystem.cpp
-        include/events.h
-        include/input_codes.h
-        include/input_system.h
-        src/input_system.cpp)
+        include/Sparkle/events.h
+        include/Sparkle/input_codes.h
+        include/Sparkle/input_system.h
+        src/input_system.cpp
+        include/Sparkle/layer.h
+        include/Sparkle/layer_stack.h
+        src/layer_stack.cpp
+        include/Sparkle.h)
 target_precompile_headers(Engine PRIVATE include/pch.h)
 
 # Link SDL3 statically

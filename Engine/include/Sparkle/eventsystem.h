@@ -5,15 +5,14 @@
 #ifndef EVENT_H
 #define EVENT_H
 
-#include "events.h"
+#include "Sparkle/events.h"
 #include <SDL3/SDL.h>
 #include <vector>
 #include <functional>
 
 namespace Sparkle {
-
     // Callback: takes a reference to base Event
-    using EventCallbackFn = std::function<void(Event&)>;
+    using EventCallbackFn = std::function<void(Event &)>;
 
     class EventSystem {
     public:
@@ -21,15 +20,14 @@ namespace Sparkle {
         void register_callback(EventType type, const EventCallbackFn &callback);
 
         // Poll SDL events, convert to Sparkle events, and dispatch
-        void poll_events();
+        void poll_events(const SDL_Event &sdl_event);
 
     private:
         std::unordered_map<EventType, EventCallbackFn> callbacks_;
+
         // Dispatch the event to the registered callback for its type.
-        void dispatch(Event& event);
+        void dispatch(Event &event);
     };
-
-
 }
 
 #endif //EVENT_H

@@ -3,8 +3,9 @@
 //
 
 #include "pch.h"
-#include "log.h"
-#include "window.h"
+#include "Sparkle/log.h"
+#include "Sparkle/window.h"
+
 namespace Sparkle {
     Window::Window()
         : m_window(nullptr), m_should_close(false) {
@@ -14,7 +15,7 @@ namespace Sparkle {
         shutdown();
     }
 
-    bool Window::init(const std::optional<WindowData>& data) {
+    bool Window::init(const std::optional<WindowData> &data) {
         if (!SDL_Init(SDL_INIT_VIDEO)) {
             LOG_ERROR("SDL_Init Error: {}\n", SDL_GetError());
             return false;
@@ -23,7 +24,7 @@ namespace Sparkle {
             m_data = *data;
         }
         u32 flags = 0;
-        if (m_data.resizable){
+        if (m_data.resizable) {
             flags |= SDL_WINDOW_RESIZABLE;
         }
         if (m_data.fullscreen) {

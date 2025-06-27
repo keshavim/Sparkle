@@ -8,7 +8,6 @@
 #include <SDL3/SDL.h>
 
 namespace Sparkle {
-
     // Wrapper for SDL scancodes (physical keyboard layout)
     enum class Key {
         Unknown = SDL_SCANCODE_UNKNOWN,
@@ -96,7 +95,7 @@ namespace Sparkle {
         End = SDL_SCANCODE_END,
         PageUp = SDL_SCANCODE_PAGEUP,
         PageDown = SDL_SCANCODE_PAGEDOWN
-    // ...add more as needed...
+        // ...add more as needed...
     };
 
 
@@ -108,7 +107,6 @@ namespace Sparkle {
         X1 = SDL_BUTTON_X1,
         X2 = SDL_BUTTON_X2
     };
-
 } // namespace Sparkle
 
 

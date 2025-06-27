@@ -8,13 +8,13 @@ namespace Sparkle {
     class Logger {
     public:
         // Singleton accessor
-        static Logger& Instance() {
+        static Logger &Instance() {
             static Logger instance;
             return instance;
         }
 
         // Get the underlying spdlog logger
-        std::shared_ptr<spdlog::logger>& Get() {
+        std::shared_ptr<spdlog::logger> &Get() {
             return m_logger;
         }
 
@@ -24,19 +24,22 @@ namespace Sparkle {
         }
 
         // Set log pattern at runtime
-        void SetPattern(const std::string& pattern) const {
+        void SetPattern(const std::string &pattern) const {
             m_logger->set_pattern(pattern);
         }
 
         // Non-copyable, non-movable
-        Logger(const Logger&) = delete;
-        Logger& operator=(const Logger&) = delete;
+        Logger(const Logger &) = delete;
+
+        Logger &operator=(const Logger &) = delete;
+
     private:
         Logger() {
             m_logger = spdlog::stdout_color_mt("ENGINE");
             m_logger->set_pattern("[%H:%M:%S] [%n] [%^%l%$] %v");
             m_logger->set_level(spdlog::level::trace);
         }
+
         ~Logger() = default;
 
         std::shared_ptr<spdlog::logger> m_logger;

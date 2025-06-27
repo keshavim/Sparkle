@@ -5,7 +5,7 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-#include "base.h"
+#include "Sparkle/base.h"
 #include <SDL3/SDL.h>
 
 namespace Sparkle {
@@ -16,6 +16,9 @@ namespace Sparkle {
         i32 height = 600;
         bool fullscreen = false;
         bool resizable = true;
+        bool vsync = true;
+        bool focused = true;
+        bool minimized = false;
     };
 
     // The Window class manages the SDL window and its properties.
@@ -23,30 +26,34 @@ namespace Sparkle {
     class Window {
     public:
         Window();
+
         ~Window();
 
         // No copying
-        Window(const Window&) = delete;
-        Window& operator=(const Window&) = delete;
+        Window(const Window &) = delete;
+
+        Window &operator=(const Window &) = delete;
 
         // Window API
         bool init(const std::optional<WindowData> &data);
+
         void shutdown();
 
         // Accessors (defined inline)
-        [[nodiscard]] SDL_Window* get_sdl_window() const { return m_window; }
+        SDL_Window *get_sdl_window() const { return m_window; }
         void should_close(bool close) { m_should_close = close; }
 
-        WindowData& get_props() { return m_data; }
+        WindowData &get_data() { return m_data; }
+
         void on_resize(const i32 new_width, const i32 new_height) {
             m_data.width = new_width;
             m_data.height = new_height;
         }
 
-
+        void set_focus(bool focused) { m_data.focused = focused; }
 
     private:
-        SDL_Window* m_window;
+        SDL_Window *m_window;
         bool m_should_close;
         WindowData m_data;
     };

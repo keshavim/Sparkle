@@ -1,11 +1,11 @@
-#include "input_system.h"
+#include "pch.h"
+#include "Sparkle/input_system.h"
 #include <SDL3/SDL.h>
 
-#include "base.h"
+#include "Sparkle/base.h"
 
 namespace Sparkle {
-
-    InputSystem& InputSystem::instance() {
+    InputSystem &InputSystem::instance() {
         static InputSystem instance;
         return instance;
     }
@@ -30,7 +30,7 @@ namespace Sparkle {
         return m_mouse_buttons_down.contains(button);
     }
 
-    std::pair<i32,i32> InputSystem::get_mouse_position() const {
+    std::pair<i32, i32> InputSystem::get_mouse_position() const {
         return {m_mouse_x, m_mouse_y};
     }
 
@@ -62,7 +62,4 @@ namespace Sparkle {
         // For "just pressed/released" logic, clear per-frame state here.
         TODO();
     }
-
-
-
 }
