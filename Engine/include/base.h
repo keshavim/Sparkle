@@ -5,28 +5,7 @@
 #ifndef BASE_H
 #define BASE_H
 
-// Common C++ Standard Library headers
-#include <iostream>
-#include <vector>
-#include <string>
-#include <memory>
-#include <algorithm>
-#include <utility>
-#include <limits>
-#include <unordered_map>
-#include <unordered_set>
-#include <functional>
-#include <type_traits>
-#include <chrono>
-#include <thread>
-
-#include <cassert>
-#include <cmath>
 #include <cstdint>
-#include <cstdlib>
-#include <cstdio>
-#include <cstring>
-
 // Short typedefs for fixed-width integers
 using i8  = int8_t;
 using u8  = uint8_t;

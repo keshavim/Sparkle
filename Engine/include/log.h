@@ -15,17 +15,17 @@ namespace Sparkle {
 
         // Get the underlying spdlog logger
         std::shared_ptr<spdlog::logger>& Get() {
-            return logger_;
+            return m_logger;
         }
 
         // Set log level at runtime
         void SetLevel(const spdlog::level::level_enum level) const {
-            logger_->set_level(level);
+            m_logger->set_level(level);
         }
 
         // Set log pattern at runtime
         void SetPattern(const std::string& pattern) const {
-            logger_->set_pattern(pattern);
+            m_logger->set_pattern(pattern);
         }
 
         // Non-copyable, non-movable
@@ -33,13 +33,13 @@ namespace Sparkle {
         Logger& operator=(const Logger&) = delete;
     private:
         Logger() {
-            logger_ = spdlog::stdout_color_mt("ENGINE");
-            logger_->set_pattern("[%H:%M:%S] [%n] [%^%l%$] %v");
-            logger_->set_level(spdlog::level::trace);
+            m_logger = spdlog::stdout_color_mt("ENGINE");
+            m_logger->set_pattern("[%H:%M:%S] [%n] [%^%l%$] %v");
+            m_logger->set_level(spdlog::level::trace);
         }
         ~Logger() = default;
 
-        std::shared_ptr<spdlog::logger> logger_;
+        std::shared_ptr<spdlog::logger> m_logger;
     };
 }
 

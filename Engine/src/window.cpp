@@ -1,31 +1,42 @@
 //
 // Created by overlord on 6/26/25.
 //
-#include "base.h"
+
+#include "pch.h"
 #include "log.h"
 #include "window.h"
 namespace Sparkle {
     Window::Window()
-        : window_(nullptr), window_should_close_(false), props_("",0,0) {
+        : m_window(nullptr), m_window_should_close(false) {
     }
 
     Window::~Window() {
         shutdown();
     }
 
-    bool Window::init(const WindowProps& props) {
+    bool Window::init(const std::optional<WindowProps>& props) {
         if (!SDL_Init(SDL_INIT_VIDEO)) {
             LOG_ERROR("SDL_Init Error: {}\n", SDL_GetError());
             return false;
         }
-        props_ = props;
-        window_ = SDL_CreateWindow(props.title.c_str(), props.width, props.height, 0);
-        if (!window_) {
+        if (props) {
+            m_props = *props;
+        }
+        u32 flags = 0;
+        if (m_props.resizable){
+            flags |= SDL_WINDOW_RESIZABLE;
+        }
+        if (m_props.fullscreen) {
+            flags |= SDL_WINDOW_FULLSCREEN;
+        }
+
+        m_window = SDL_CreateWindow(m_props.title.c_str(), m_props.width, m_props.height, flags);
+        if (!m_window) {
             LOG_ERROR("SDL_CreateWindow Error: {}\n", SDL_GetError());
             SDL_Quit();
             return false;
         }
-        window_should_close_ = false;
+        m_window_should_close = false;
         return true;
     }
 
@@ -33,15 +44,15 @@ namespace Sparkle {
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_EVENT_QUIT) {
-                window_should_close_ = true;
+                m_window_should_close = true;
             }
         }
     }
 
     void Window::shutdown() {
-        if (window_) {
-            SDL_DestroyWindow(window_);
-            window_ = nullptr;
+        if (m_window) {
+            SDL_DestroyWindow(m_window);
+            m_window = nullptr;
         }
         SDL_Quit();
     }

@@ -28,8 +28,9 @@ add_executable(Engine ${SOURCES}
         include/window.h
         src/window.cpp
         include/engine.h
-        src/engine.cpp)
-target_precompile_headers(Engine PRIVATE include/base.h)
+        src/engine.cpp
+        include/pch.h)
+target_precompile_headers(Engine PRIVATE include/pch.h)
 
 # Link SDL3 statically
 target_link_libraries(Engine PRIVATE SDL3::SDL3)

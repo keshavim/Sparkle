@@ -5,9 +5,9 @@
 #ifndef ENGINE_H
 #define ENGINE_H
 
-
+#include "base.h"
 #include "window.h"
-#include "log.h"
+
 namespace Sparkle {
     class Engine {
     public:
@@ -19,18 +19,18 @@ namespace Sparkle {
         Engine& operator=(const Engine&) = delete;
 
         // Main entry point
-        void run(const WindowProps& props);
+        void run();
 
     protected:
         // Game-specific logic:
         virtual void on_update(f32 delta_time) = 0;
 
         // Accessors for systems
-        Window& get_window() { return window_; }
+        Window& get_window() { return m_window; }
 
     private:
-        Window window_;
-        bool is_running_;
+        Window m_window;
+        bool m_is_running;
     };
 }
 #endif //ENGINE_H

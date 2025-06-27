@@ -1,5 +1,7 @@
 
-#include <engine.h>
+#include "pch.h"
+#include "engine.h"
+#include "log.h"
 
 class TestGame final : public Sparkle::Engine {
 public:
@@ -15,6 +17,6 @@ protected:
 
 int main() {
     TestGame game;
-    game.run(Sparkle::WindowProps{"test", 800, 600});
+    game.run();
     return 0;
 }

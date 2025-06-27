@@ -1,30 +1,31 @@
 //
 // Created by overlord on 6/26/25.
 //
-#include "base.h"
+#include "pch.h"
 #include "engine.h"
+#include "log.h"
 
 namespace Sparkle {
     Engine::Engine()
-        : is_running_(false)
+        : m_is_running(false)
     {}
 
     Engine::~Engine() {
         // Cleanup handled by member destructors
     }
 
-    void Engine::run(const WindowProps& props) {
+    void Engine::run() {
         LOG_INFO("Engine starting...");
 
-        if (!window_.init(props)) {
+        if (!m_window.init(std::nullopt)) {
             LOG_ERROR("Failed to initialize window system.");
             return;
         }
 
-        is_running_ = true;
+        m_is_running = true;
         u64 last_time = SDL_GetTicks();
-        while (is_running_ && !window_.should_close()) {
-            window_.poll_events();
+        while (m_is_running && !m_window.should_close()) {
+            m_window.poll_events();
 
             const u64 now = SDL_GetTicks();
             const f32 delta_time = static_cast<f32>(now - last_time) / 1000.0f;
@@ -35,6 +36,6 @@ namespace Sparkle {
         }
 
         LOG_INFO("Engine shutting down...");
-        window_.shutdown();
+        m_window.shutdown();
     }
 }

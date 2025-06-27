@@ -5,13 +5,16 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
+#include "base.h"
 #include <SDL3/SDL.h>
 
 namespace Sparkle {
     struct WindowProps {
-        std::string title;
-        i32 width;
-        i32 height;
+        std::string title = "window";
+        i32 width = 800;
+        i32 height = 600;
+        bool fullscreen = false;
+        bool resizable = true;
     };
 
     class Window {
@@ -24,21 +27,22 @@ namespace Sparkle {
         Window& operator=(const Window&) = delete;
 
         // Window API
-        bool init(const WindowProps& props);
+        bool init(const std::optional<WindowProps> &props);
         void poll_events();
         void shutdown();
 
         // Accessors (defined inline)
-        [[nodiscard]] SDL_Window* get_sdl_window() const { return window_; }
-        [[nodiscard]] bool should_close() const { return window_should_close_; }
-        WindowProps& get_props() { return props_; }
+        [[nodiscard]] SDL_Window* get_sdl_window() const { return m_window; }
+        [[nodiscard]] bool should_close() const { return m_window_should_close; }
+        const WindowProps& get_props() { return m_props; }
+        void set_props(const WindowProps& props) { m_props = props; }
 
 
 
     private:
-        SDL_Window* window_;
-        bool window_should_close_;
-        WindowProps props_;
+        SDL_Window* m_window;
+        bool m_window_should_close;
+        WindowProps m_props;
     };
 }
 #endif //WINDOW_H
