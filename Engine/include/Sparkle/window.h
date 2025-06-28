@@ -7,6 +7,8 @@
 
 #include "Sparkle/base.h"
 #include <SDL3/SDL.h>
+#include <SDL3/SDL_vulkan.h>
+#include <vulkan/vulkan.h>
 
 namespace Sparkle {
     //struct containing window data
@@ -40,8 +42,10 @@ namespace Sparkle {
         void shutdown();
 
         // Accessors (defined inline)
-        SDL_Window *get_sdl_window() const { return m_window; }
+        // Vulkan-specific getters
+        SDL_Window* get_sdl_window() const { return m_window; }
         void should_close(bool close) { m_should_close = close; }
+        f32 get_scale() const { return m_scale; }
 
         WindowData &get_data() { return m_data; }
 
@@ -56,6 +60,8 @@ namespace Sparkle {
         SDL_Window *m_window;
         bool m_should_close;
         WindowData m_data;
+
+        f32 m_scale = 1.0f;
     };
 }
 #endif //WINDOW_H

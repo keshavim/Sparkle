@@ -13,7 +13,7 @@ namespace Sparkle {
     // Base class for all layers (game, UI, ImGui, etc.)
     class Layer {
     public:
-        Layer(const std::string &name = "Layer") : m_name(name) {
+        explicit Layer(const std::string &name = "Layer") : m_name(name) {
         }
 
         virtual ~Layer() = default;

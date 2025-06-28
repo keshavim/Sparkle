@@ -5,6 +5,9 @@
 #include "pch.h"
 #include "Sparkle/log.h"
 #include "Sparkle/window.h"
+#include "Sparkle/engine.h"
+
+#include <sys/syslog.h>
 
 namespace Sparkle {
     Window::Window()
@@ -16,10 +19,7 @@ namespace Sparkle {
     }
 
     bool Window::init(const std::optional<WindowData> &data) {
-        if (!SDL_Init(SDL_INIT_VIDEO)) {
-            LOG_ERROR("SDL_Init Error: {}\n", SDL_GetError());
-            return false;
-        }
+
         if (data) {
             m_data = *data;
         }
@@ -30,14 +30,20 @@ namespace Sparkle {
         if (m_data.fullscreen) {
             flags |= SDL_WINDOW_FULLSCREEN;
         }
+        flags |= SDL_WINDOW_VULKAN | SDL_WINDOW_HIDDEN | SDL_WINDOW_HIGH_PIXEL_DENSITY;
 
-        m_window = SDL_CreateWindow(m_data.title.c_str(), m_data.width, m_data.height, flags);
+        // Create window with Vulkan graphics context
+        m_scale = SDL_GetDisplayContentScale(SDL_GetPrimaryDisplay());
+        m_window = SDL_CreateWindow("Dear ImGui SDL3+Vulkan example", (int)(1280 * m_scale), (int)(720 * m_scale), flags);
         if (!m_window) {
             LOG_ERROR("SDL_CreateWindow Error: {}\n", SDL_GetError());
             SDL_Quit();
             return false;
         }
         m_should_close = false;
+
+
+
         return true;
     }
 
@@ -47,4 +53,6 @@ namespace Sparkle {
             m_window = nullptr;
         }
     }
+
 }
+

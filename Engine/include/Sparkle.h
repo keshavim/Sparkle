@@ -9,6 +9,7 @@
 #include "Sparkle/log.h"
 #include "Sparkle/engine.h"
 #include "Sparkle/input_system.h"
+#include "Sparkle/imguilayer.h"
 
 
 #endif //SPARKLE_H
