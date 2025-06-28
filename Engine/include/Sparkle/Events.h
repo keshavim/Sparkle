@@ -5,8 +5,8 @@
 #ifndef EVENTS_H
 #define EVENTS_H
 
-#include "Sparkle/base.h"
-#include "Sparkle/input_codes.h"
+#include "Sparkle/Base.h"
+#include "Sparkle/InputCodes.h"
 #include <string>
 #include <format> // C++20 std::format, or use fmtlib
 

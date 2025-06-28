@@ -5,7 +5,7 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-#include "Sparkle/base.h"
+#include "Sparkle/Base.h"
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_vulkan.h>
 #include <vulkan/vulkan.h>
@@ -37,24 +37,24 @@ namespace Sparkle {
         Window &operator=(const Window &) = delete;
 
         // Window API
-        bool init(const std::optional<WindowData> &data);
+        bool Init(const std::optional<WindowData> &data);
 
-        void shutdown();
+        void Shutdown();
 
         // Accessors (defined inline)
         // Vulkan-specific getters
-        SDL_Window* get_sdl_window() const { return m_window; }
-        void should_close(bool close) { m_should_close = close; }
-        f32 get_scale() const { return m_scale; }
+        SDL_Window* GetSDLWindow() const { return m_window; }
+        void ShouldClose(bool close) { m_should_close = close; }
+        f32 GetScale() const { return m_scale; }
 
-        WindowData &get_data() { return m_data; }
+        WindowData &GetData() { return m_data; }
 
-        void on_resize(const i32 new_width, const i32 new_height) {
+        void OnResize(const i32 new_width, const i32 new_height) {
             m_data.width = new_width;
             m_data.height = new_height;
         }
 
-        void set_focus(bool focused) { m_data.focused = focused; }
+        void SetFocus(bool focused) { m_data.focused = focused; }
 
     private:
         SDL_Window *m_window;

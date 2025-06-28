@@ -1,12 +1,12 @@
 //
 // Created by overlord on 6/26/25.
 //
-#include "pch.h"
-#include "Sparkle/engine.h"
+#include "skpch.h"
+#include "Sparkle/Engine.h"
 
 #include "imgui_impl_vulkan.h"
-#include "Sparkle/log.h"
-#include "Sparkle/input_system.h"
+#include "Sparkle/Log.h"
+#include "Sparkle/InputSystem.h"
 
 
 //temporery stuff---------------------------------------------------------------------------------------------------
@@ -345,37 +345,32 @@ namespace Sparkle {
         : m_is_running(false) {
         assert(s_instance == nullptr && "Engine already initialized");
         s_instance = this;
-        LOG_INFO("Engine starting...");
+        SK_LOG_INFO("Engine starting...");
 
         if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMEPAD)) {
-            LOG_ERROR("SDL_Init Error: {}\n", SDL_GetError());
+            SK_LOG_ERROR("SDL_Init Error: {}\n", SDL_GetError());
             return;
         }
 
-        if (!m_window.init(std::nullopt)) {
-            LOG_ERROR("Failed to initialize window system.");
+        if (!m_window.Init(std::nullopt)) {
+            SK_LOG_ERROR("Failed to initialize window system.");
             return;
         }
 
-
+        m_renderer.Init();
 
         register_events();
     }
 
     Engine::~Engine() {
-        LOG_INFO("Engine shutting down...");
+        SK_LOG_INFO("Engine shutting down...");
         m_layers.clear();
         //temporery ------------------------------------------------------------------------------------------------------------
 
-        ImGui_ImplVulkan_Shutdown();
-        ImGui_ImplSDL3_Shutdown();
-        ImGui::DestroyContext();
-
-        CleanupVulkanWindow();
-        CleanupVulkan();
+        m_renderer.Cleanup();
 
         //temprery end ---------------------------------------------------------------------------------------------------------
-        m_window.shutdown();
+        m_window.Shutdown();
         SDL_Quit();
     }
 
@@ -406,72 +401,72 @@ namespace Sparkle {
         //temporery -------------------------------------------------------------
          //temporery stuff ------------------------------------------------------------------------------------------------
 
-
-        SDL_Window *window = m_window.get_sdl_window();
-
-        ImVector<const char *> extensions; {
-            uint32_t sdl_extensions_count = 0;
-            const char *const*sdl_extensions = SDL_Vulkan_GetInstanceExtensions(&sdl_extensions_count);
-            for (uint32_t n = 0; n < sdl_extensions_count; n++)
-                extensions.push_back(sdl_extensions[n]);
-        }
-        SetupVulkan(extensions);
-
-        // Create Window Surface
-        VkSurfaceKHR surface;
-        VkResult err;
-        if (SDL_Vulkan_CreateSurface(window, g_Instance, g_Allocator, &surface) == 0) {
-            printf("Failed to create Vulkan surface.\n");
-            return;
-        }
-
-        // Create Framebuffers
-        int w, h;
-        SDL_GetWindowSize(window, &w, &h);
-        ImGui_ImplVulkanH_Window *wd = &g_MainWindowData;
-        SetupVulkanWindow(wd, surface, w, h);
-        SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
-        SDL_ShowWindow(window);
-
-
-        // Setup Dear ImGui context
-        IMGUI_CHECKVERSION();
-        ImGui::CreateContext();
-        ImGuiIO &io = ImGui::GetIO();
-        (void) io;
-        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
-        io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad; // Enable Gamepad Controls
-
-        // Setup Dear ImGui style
-        ImGui::StyleColorsDark();
-        //ImGui::StyleColorsLight();
-
-        // Setup scaling
-        ImGuiStyle &style = ImGui::GetStyle();
-        style.ScaleAllSizes(m_window.get_scale());
-        // Bake a fixed style scale. (until we have a solution for dynamic style scaling, changing this requires resetting Style + calling this again)
-        style.FontScaleDpi = m_window.get_scale();
-        // Set initial font scale. (using io.ConfigDpiScaleFonts=true makes this unnecessary. We leave both here for documentation purpose)
-
-        // Setup Platform/Renderer backends
-        ImGui_ImplSDL3_InitForVulkan(window);
-        ImGui_ImplVulkan_InitInfo init_info = {};
-        //init_info.ApiVersion = VK_API_VERSION_1_3;              // Pass in your value of VkApplicationInfo::apiVersion, otherwise will default to header version.
-        init_info.Instance = g_Instance;
-        init_info.PhysicalDevice = g_PhysicalDevice;
-        init_info.Device = g_Device;
-        init_info.QueueFamily = g_QueueFamily;
-        init_info.Queue = g_Queue;
-        init_info.PipelineCache = g_PipelineCache;
-        init_info.DescriptorPool = g_DescriptorPool;
-        init_info.RenderPass = wd->RenderPass;
-        init_info.Subpass = 0;
-        init_info.MinImageCount = g_MinImageCount;
-        init_info.ImageCount = wd->ImageCount;
-        init_info.MSAASamples = VK_SAMPLE_COUNT_1_BIT;
-        init_info.Allocator = g_Allocator;
-        init_info.CheckVkResultFn = check_vk_result;
-        ImGui_ImplVulkan_Init(&init_info);
+        //
+        // SDL_Window *window = m_window.GetSDLWindow();
+        //
+        // ImVector<const char *> extensions; {
+        //     uint32_t sdl_extensions_count = 0;
+        //     const char *const*sdl_extensions = SDL_Vulkan_GetInstanceExtensions(&sdl_extensions_count);
+        //     for (uint32_t n = 0; n < sdl_extensions_count; n++)
+        //         extensions.push_back(sdl_extensions[n]);
+        // }
+        // SetupVulkan(extensions);
+        //
+        // // Create Window Surface
+        // VkSurfaceKHR surface;
+        // VkResult err;
+        // if (SDL_Vulkan_CreateSurface(window, g_Instance, g_Allocator, &surface) == 0) {
+        //     printf("Failed to create Vulkan surface.\n");
+        //     return;
+        // }
+        //
+        // // Create Framebuffers
+        // int w, h;
+        // SDL_GetWindowSize(window, &w, &h);
+        // ImGui_ImplVulkanH_Window *wd = &g_MainWindowData;
+        // SetupVulkanWindow(wd, surface, w, h);
+        // SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+        // SDL_ShowWindow(window);
+        //
+        //
+        // // Setup Dear ImGui context
+        // IMGUI_CHECKVERSION();
+        // ImGui::CreateContext();
+        // ImGuiIO &io = ImGui::GetIO();
+        // (void) io;
+        // io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
+        // io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad; // Enable Gamepad Controls
+        //
+        // // Setup Dear ImGui style
+        // ImGui::StyleColorsDark();
+        // //ImGui::StyleColorsLight();
+        //
+        // // Setup scaling
+        // ImGuiStyle &style = ImGui::GetStyle();
+        // style.ScaleAllSizes(m_window.GetScale());
+        // // Bake a fixed style scale. (until we have a solution for dynamic style scaling, changing this requires resetting Style + calling this again)
+        // style.FontScaleDpi = m_window.GetScale();
+        // // Set initial font scale. (using io.ConfigDpiScaleFonts=true makes this unnecessary. We leave both here for documentation purpose)
+        //
+        // // Setup Platform/Renderer backends
+        // ImGui_ImplSDL3_InitForVulkan(window);
+        // ImGui_ImplVulkan_InitInfo init_info = {};
+        // //init_info.ApiVersion = VK_API_VERSION_1_3;              // Pass in your value of VkApplicationInfo::apiVersion, otherwise will default to header version.
+        // init_info.Instance = g_Instance;
+        // init_info.PhysicalDevice = g_PhysicalDevice;
+        // init_info.Device = g_Device;
+        // init_info.QueueFamily = g_QueueFamily;
+        // init_info.Queue = g_Queue;
+        // init_info.PipelineCache = g_PipelineCache;
+        // init_info.DescriptorPool = g_DescriptorPool;
+        // init_info.RenderPass = wd->RenderPass;
+        // init_info.Subpass = 0;
+        // init_info.MinImageCount = g_MinImageCount;
+        // init_info.ImageCount = wd->ImageCount;
+        // init_info.MSAASamples = VK_SAMPLE_COUNT_1_BIT;
+        // init_info.Allocator = g_Allocator;
+        // init_info.CheckVkResultFn = check_vk_result;
+        // ImGui_ImplVulkan_Init(&init_info);
 
         // Load Fonts
         // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
@@ -506,155 +501,155 @@ namespace Sparkle {
         while (m_is_running) {
             SDL_Event sdl_event;
             while (SDL_PollEvent(&sdl_event)) {
-                m_event_system.poll_events(sdl_event);
+                m_event_system.PollEvents(sdl_event);
             }
 
             const u64 now = SDL_GetTicks();
             const f32 delta_time = static_cast<f32>(now - last_time) / 1000.0f;
             last_time = now;
 
+            m_renderer.Render(show_demo_window, show_another_window, clear_color);
+
             // temporery ------------------------------------------------------------
-
-            if (SDL_GetWindowFlags(window) & SDL_WINDOW_MINIMIZED) {
-                SDL_Delay(10);
-                continue;
-            }
-            // Resize swap chain?
-            int fb_width, fb_height;
-            SDL_GetWindowSize(window, &fb_width, &fb_height);
-            if (fb_width > 0 && fb_height > 0 && (
-                    g_SwapChainRebuild || g_MainWindowData.Width != fb_width || g_MainWindowData.Height != fb_height)) {
-                ImGui_ImplVulkan_SetMinImageCount(g_MinImageCount);
-                ImGui_ImplVulkanH_CreateOrResizeWindow(g_Instance, g_PhysicalDevice, g_Device, &g_MainWindowData,
-                                                       g_QueueFamily, g_Allocator, fb_width, fb_height,
-                                                       g_MinImageCount);
-                g_MainWindowData.FrameIndex = 0;
-                g_SwapChainRebuild = false;
-            }
-
-            // Start the Dear ImGui frame
-            ImGui_ImplVulkan_NewFrame();
-            ImGui_ImplSDL3_NewFrame();
-            ImGui::NewFrame();
-
-            // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-            if (show_demo_window)
-                ImGui::ShowDemoWindow(&show_demo_window);
-
-            // 2. Show a simple window that we create ourselves. We use a Begin/End pair to create a named window.
-            {
-                static float f = 0.0f;
-                static int counter = 0;
-
-                ImGui::Begin("Hello, world!"); // Create a window called "Hello, world!" and append into it.
-
-                ImGui::Text("This is some useful text."); // Display some text (you can use a format strings too)
-                ImGui::Checkbox("Demo Window", &show_demo_window); // Edit bools storing our window open/close state
-                ImGui::Checkbox("Another Window", &show_another_window);
-
-                ImGui::SliderFloat("float", &f, 0.0f, 1.0f); // Edit 1 float using a slider from 0.0f to 1.0f
-                ImGui::ColorEdit3("clear color", (float *) &clear_color); // Edit 3 floats representing a color
-
-                if (ImGui::Button("Button"))
-                    // Buttons return true when clicked (most widgets return true when edited/activated)
-                    counter++;
-                ImGui::SameLine();
-                ImGui::Text("counter = %d", counter);
-
-                ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
-                ImGui::End();
-            }
-
-            // 3. Show another simple window.
-            if (show_another_window) {
-                ImGui::Begin("Another Window", &show_another_window);
-                // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-                ImGui::Text("Hello from another window!");
-                if (ImGui::Button("Close Me"))
-                    show_another_window = false;
-                ImGui::End();
-            }
-
-            // Rendering
-            ImGui::Render();
-            ImDrawData *draw_data = ImGui::GetDrawData();
-            const bool is_minimized = (draw_data->DisplaySize.x <= 0.0f || draw_data->DisplaySize.y <= 0.0f);
-            if (!is_minimized) {
-                wd->ClearValue.color.float32[0] = clear_color.x * clear_color.w;
-                wd->ClearValue.color.float32[1] = clear_color.y * clear_color.w;
-                wd->ClearValue.color.float32[2] = clear_color.z * clear_color.w;
-                wd->ClearValue.color.float32[3] = clear_color.w;
-                FrameRender(wd, draw_data);
-                FramePresent(wd);
-            }
+            //
+            // if (SDL_GetWindowFlags(window) & SDL_WINDOW_MINIMIZED) {
+            //     SDL_Delay(10);
+            //     continue;
+            // }
+            // // Resize swap chain?
+            // int fb_width, fb_height;
+            // SDL_GetWindowSize(window, &fb_width, &fb_height);
+            // if (fb_width > 0 && fb_height > 0 && (
+            //         g_SwapChainRebuild || g_MainWindowData.Width != fb_width || g_MainWindowData.Height != fb_height)) {
+            //     ImGui_ImplVulkan_SetMinImageCount(g_MinImageCount);
+            //     ImGui_ImplVulkanH_CreateOrResizeWindow(g_Instance, g_PhysicalDevice, g_Device, &g_MainWindowData,
+            //                                            g_QueueFamily, g_Allocator, fb_width, fb_height,
+            //                                            g_MinImageCount);
+            //     g_MainWindowData.FrameIndex = 0;
+            //     g_SwapChainRebuild = false;
+            // }
+            //
+            // // Start the Dear ImGui frame
+            // ImGui_ImplVulkan_NewFrame();
+            // ImGui_ImplSDL3_NewFrame();
+            // ImGui::NewFrame();
+            //
+            // // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
+            // if (show_demo_window)
+            //     ImGui::ShowDemoWindow(&show_demo_window);
+            //
+            // // 2. Show a simple window that we create ourselves. We use a Begin/End pair to create a named window.
+            // {
+            //     static float f = 0.0f;
+            //     static int counter = 0;
+            //
+            //     ImGui::Begin("Hello, world!"); // Create a window called "Hello, world!" and append into it.
+            //
+            //     ImGui::Text("This is some useful text."); // Display some text (you can use a format strings too)
+            //     ImGui::Checkbox("Demo Window", &show_demo_window); // Edit bools storing our window open/close state
+            //     ImGui::Checkbox("Another Window", &show_another_window);
+            //
+            //     ImGui::SliderFloat("float", &f, 0.0f, 1.0f); // Edit 1 float using a slider from 0.0f to 1.0f
+            //     ImGui::ColorEdit3("clear color", (float *) &clear_color); // Edit 3 floats representing a color
+            //
+            //     if (ImGui::Button("Button"))
+            //         // Buttons return true when clicked (most widgets return true when edited/activated)
+            //         counter++;
+            //     ImGui::SameLine();
+            //     ImGui::Text("counter = %d", counter);
+            //
+            //     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+            //     ImGui::End();
+            // }
+            //
+            // // 3. Show another simple window.
+            // if (show_another_window) {
+            //     ImGui::Begin("Another Window", &show_another_window);
+            //     // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+            //     ImGui::Text("Hello from another window!");
+            //     if (ImGui::Button("Close Me"))
+            //         show_another_window = false;
+            //     ImGui::End();
+            // }
+            //
+            // // Rendering
+            // ImGui::Render();
+            // ImDrawData *draw_data = ImGui::GetDrawData();
+            // const bool is_minimized = (draw_data->DisplaySize.x <= 0.0f || draw_data->DisplaySize.y <= 0.0f);
+            // if (!is_minimized) {
+            //     wd->ClearValue.color.float32[0] = clear_color.x * clear_color.w;
+            //     wd->ClearValue.color.float32[1] = clear_color.y * clear_color.w;
+            //     wd->ClearValue.color.float32[2] = clear_color.z * clear_color.w;
+            //     wd->ClearValue.color.float32[3] = clear_color.w;
+            //     FrameRender(wd, draw_data);
+            //     FramePresent(wd);
+            // }
         }
 
-        err = vkDeviceWaitIdle(g_Device);
-        check_vk_result(err);
     }
 
 
     void Engine::register_events() {
         //may make multiple windows possible so this is temp
-        m_event_system.register_callback(EventType::WindowClose, [&](Event &e) {
-            m_window.should_close(true);
+        m_event_system.RegisterCallback(EventType::WindowClose, [&](Event &e) {
+            m_window.ShouldClose(true);
             on_event(e);
         });
 
-        m_event_system.register_callback(EventType::WindowResize, [&](Event &e) {
+        m_event_system.RegisterCallback(EventType::WindowResize, [&](Event &e) {
             auto &resize_event = dynamic_cast<WindowResizeEvent &>(e);
-            m_window.on_resize(resize_event.width, resize_event.height);
+            m_window.OnResize(resize_event.width, resize_event.height);
             on_event(e);
         });
 
-        m_event_system.register_callback(EventType::WindowFocus, [&](Event &e) {
-            m_window.set_focus(dynamic_cast<WindowFocusEvent &>(e).focused);
+        m_event_system.RegisterCallback(EventType::WindowFocus, [&](Event &e) {
+            m_window.SetFocus(dynamic_cast<WindowFocusEvent &>(e).focused);
             on_event(e);
         });
 
-        m_event_system.register_callback(EventType::WindowMoved, [&](Event &e) {
+        m_event_system.RegisterCallback(EventType::WindowMoved, [&](Event &e) {
             on_event(e);
         });
 
         // Key Down
-        m_event_system.register_callback(EventType::KeyDown, [&](Event &e) {
+        m_event_system.RegisterCallback(EventType::KeyDown, [&](Event &e) {
             auto &key_event = dynamic_cast<KeyDownEvent &>(e);
-            InputSystem::instance().set_key_pressed(key_event.keycode, true);
+            InputSystem::instance().SetKeyPressed(key_event.keycode, true);
             on_event(e);
         });
 
         // Key Up
-        m_event_system.register_callback(EventType::KeyUp, [&](Event &e) {
+        m_event_system.RegisterCallback(EventType::KeyUp, [&](Event &e) {
             auto &key_event = dynamic_cast<KeyUpEvent &>(e);
-            InputSystem::instance().set_key_pressed(key_event.keycode, false);
+            InputSystem::instance().SetKeyPressed(key_event.keycode, false);
             on_event(e);
         });
 
         // Mouse Button Down
-        m_event_system.register_callback(EventType::MouseButtonDown, [&](Event &e) {
+        m_event_system.RegisterCallback(EventType::MouseButtonDown, [&](Event &e) {
             auto &mouse_event = dynamic_cast<MouseButtonDownEvent &>(e);
-            InputSystem::instance().set_mouse_button_pressed(mouse_event.button, true);
+            InputSystem::instance().SetMouseBtnPressed(mouse_event.button, true);
             on_event(e);
         });
 
         // Mouse Button Up
-        m_event_system.register_callback(EventType::MouseButtonUp, [&](Event &e) {
+        m_event_system.RegisterCallback(EventType::MouseButtonUp, [&](Event &e) {
             auto &mouse_event = dynamic_cast<MouseButtonUpEvent &>(e);
-            InputSystem::instance().set_mouse_button_pressed(mouse_event.button, false);
+            InputSystem::instance().SetMouseBtnPressed(mouse_event.button, false);
             on_event(e);
         });
 
         // Mouse Moved
-        m_event_system.register_callback(EventType::MouseMoved, [&](Event &e) {
+        m_event_system.RegisterCallback(EventType::MouseMoved, [&](Event &e) {
             auto &moved_event = dynamic_cast<MouseMovedEvent &>(e);
-            InputSystem::instance().set_mouse_position(moved_event.x, moved_event.y);
+            InputSystem::instance().SetMousePosition(moved_event.x, moved_event.y);
             on_event(e);
         });
 
         // Mouse Scrolled (if you want to track scroll)
-        m_event_system.register_callback(EventType::MouseScrolled, [&](Event &e) {
+        m_event_system.RegisterCallback(EventType::MouseScrolled, [&](Event &e) {
             auto &scroll_event = dynamic_cast<MouseScrolledEvent &>(e);
-            InputSystem::instance().set_mouse_scroll(scroll_event.xoffset, scroll_event.yoffset);
+            InputSystem::instance().SetMouseScroll(scroll_event.xoffset, scroll_event.yoffset);
             on_event(e);
         });
     }

@@ -29,25 +29,27 @@ find_package(Vulkan REQUIRED)
 
 # Create executable
 add_executable(Engine ${SOURCES}
-        include/Sparkle/log.h
-        include/Sparkle/window.h
-        src/window.cpp
-        include/Sparkle/engine.h
-        src/engine.cpp
-        include/pch.h
-        include/Sparkle/eventsystem.h
-        src/eventsystem.cpp
-        include/Sparkle/events.h
-        include/Sparkle/input_codes.h
-        include/Sparkle/input_system.h
-        src/input_system.cpp
-        include/Sparkle/layer.h
-        include/Sparkle/layer_stack.h
-        src/layer_stack.cpp
+        include/Sparkle/Log.h
+        include/Sparkle/Window.h
+        src/Window.cpp
+        include/Sparkle/Engine.h
+        src/Engine.cpp
+        include/skpch.h
+        include/Sparkle/EventSystem.h
+        src/EventSystem.cpp
+        include/Sparkle/Events.h
+        include/Sparkle/InputCodes.h
+        include/Sparkle/InputSystem.h
+        src/InputSystem.cpp
+        include/Sparkle/Layer.h
+        include/Sparkle/LayerStack.h
+        src/LayerStack.cpp
         include/Sparkle.h
-        include/Sparkle/imguilayer.h
-        src/imguilayer.cpp)
-target_precompile_headers(Engine PRIVATE include/pch.h)
+        include/Sparkle/ImGuiLayer.h
+        src/ImGuiLayer.cpp
+        src/Renderer.cpp
+        include/Sparkle/Renderer.h)
+target_precompile_headers(Engine PRIVATE include/skpch.h)
 
 # Link SDL3 statically
 target_link_libraries(Engine PRIVATE Vulkan::Vulkan SDL3::SDL3 imgui spdlog::spdlog_header_only)

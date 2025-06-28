@@ -47,9 +47,9 @@ namespace Sparkle {
 }
 
 // Logging macros for convenience
-#define LOG_TRACE(...)    ::Sparkle::Logger::Instance().Get()->trace(__VA_ARGS__)
-#define LOG_DEBUG(...)    ::Sparkle::Logger::Instance().Get()->debug(__VA_ARGS__)
-#define LOG_INFO(...)     ::Sparkle::Logger::Instance().Get()->info(__VA_ARGS__)
-#define LOG_WARN(...)     ::Sparkle::Logger::Instance().Get()->warn(__VA_ARGS__)
-#define LOG_ERROR(...)    ::Sparkle::Logger::Instance().Get()->error(__VA_ARGS__)
-#define LOG_CRITICAL(...) ::Sparkle::Logger::Instance().Get()->critical(__VA_ARGS__)
+#define SK_LOG_TRACE(...)    ::Sparkle::Logger::Instance().Get()->trace(__VA_ARGS__)
+#define SK_LOG_DEBUG(...)    ::Sparkle::Logger::Instance().Get()->debug(__VA_ARGS__)
+#define SK_LOG_INFO(...)     ::Sparkle::Logger::Instance().Get()->info(__VA_ARGS__)
+#define SK_LOG_WARN(...)     ::Sparkle::Logger::Instance().Get()->warn(__VA_ARGS__)
+#define SK_LOG_ERROR(...)    ::Sparkle::Logger::Instance().Get()->error(__VA_ARGS__)
+#define SK_LOG_CRITICAL(...) ::Sparkle::Logger::Instance().Get()->critical(__VA_ARGS__)

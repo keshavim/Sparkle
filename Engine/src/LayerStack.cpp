@@ -1,10 +1,10 @@
 //
 // Created by overlord on 6/27/25.
 //
-#include "pch.h"
-#include "Sparkle/layer_stack.h"
+#include "skpch.h"
+#include "Sparkle/LayerStack.h"
 
-#include "Sparkle/events.h"
+#include "Sparkle/Events.h"
 
 namespace Sparkle {
     LayerStack::LayerStack() = default;

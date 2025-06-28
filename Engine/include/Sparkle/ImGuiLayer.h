@@ -5,7 +5,7 @@
 #ifndef IMGUILAYER_H
 #define IMGUILAYER_H
 
-#include "Sparkle/layer.h"
+#include "Sparkle/Layer.h"
 
 namespace Sparkle {
     class ImGuiLayer : public Layer {

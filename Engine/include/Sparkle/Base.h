@@ -7,8 +7,8 @@
 
 #include <cstdint>
 // Short typedefs for fixed-width integers
-using i8  = int8_t;
-using u8  = uint8_t;
+using i8 = int8_t;
+using u8 = uint8_t;
 using i16 = int16_t;
 using u16 = uint16_t;
 using i32 = int32_t;
@@ -67,8 +67,17 @@ using f64 = double;
 #if __cplusplus >= 201703L
 #   include <utility>
 #   define DEFER(code) auto UNIQUE_NAME(_defer_) = ::DeferHelper([&](){code;})
+
 template<typename F>
-struct DeferHelper { F f; explicit DeferHelper(F f) : f(f) {} ~DeferHelper() { f(); } };
+struct DeferHelper {
+    F f;
+
+    explicit DeferHelper(F f) : f(f) {
+    }
+
+    ~DeferHelper() { f(); }
+};
+
 #   define UNIQUE_NAME(base) CONCAT(base, __COUNTER__)
 #   define CONCAT(a, b) CONCAT_INNER(a, b)
 #   define CONCAT_INNER(a, b) a##b

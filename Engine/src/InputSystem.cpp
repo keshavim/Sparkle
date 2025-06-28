@@ -1,8 +1,8 @@
-#include "pch.h"
-#include "Sparkle/input_system.h"
+#include "skpch.h"
+#include "Sparkle/InputSystem.h"
 #include <SDL3/SDL.h>
 
-#include "Sparkle/base.h"
+#include "Sparkle/Base.h"
 
 namespace Sparkle {
     InputSystem &InputSystem::instance() {
@@ -11,7 +11,7 @@ namespace Sparkle {
     }
 
 
-    bool InputSystem::is_key_pressed(Key key) const {
+    bool InputSystem::IsKeyPressed(Key key) const {
         switch (key) {
             case Key::Ctrl:
                 return m_keys_down.contains(Key::LCtrl) || m_keys_down.contains(Key::RCtrl);
@@ -26,7 +26,7 @@ namespace Sparkle {
         }
     }
 
-    bool InputSystem::is_mouse_button_pressed(MouseButton button) const {
+    bool InputSystem::IsMouseBtnPressed(MouseButton button) const {
         return m_mouse_buttons_down.contains(button);
     }
 
@@ -34,31 +34,31 @@ namespace Sparkle {
         return {m_mouse_x, m_mouse_y};
     }
 
-    void InputSystem::set_key_pressed(Key key, bool down) {
+    void InputSystem::SetKeyPressed(Key key, bool down) {
         if (down)
             m_keys_down.insert(key);
         else
             m_keys_down.erase(key);
     }
 
-    void InputSystem::set_mouse_button_pressed(MouseButton button, bool down) {
+    void InputSystem::SetMouseBtnPressed(MouseButton button, bool down) {
         if (down)
             m_mouse_buttons_down.insert(button);
         else
             m_mouse_buttons_down.erase(button);
     }
 
-    void InputSystem::set_mouse_position(i32 x, i32 y) {
+    void InputSystem::SetMousePosition(i32 x, i32 y) {
         m_mouse_x = x;
         m_mouse_y = y;
     }
 
-    void InputSystem::set_mouse_scroll(i32 xoffset, i32 yoffset) {
+    void InputSystem::SetMouseScroll(i32 xoffset, i32 yoffset) {
         m_mouse_scroll_x = xoffset;
         m_mouse_scroll_y = yoffset;
     }
 
-    void InputSystem::next_frame() {
+    void InputSystem::NextFrame() {
         // For "just pressed/released" logic, clear per-frame state here.
         TODO();
     }

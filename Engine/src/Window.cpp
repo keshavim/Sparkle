@@ -2,10 +2,10 @@
 // Created by overlord on 6/26/25.
 //
 
-#include "pch.h"
-#include "Sparkle/log.h"
-#include "Sparkle/window.h"
-#include "Sparkle/engine.h"
+#include "skpch.h"
+#include "Sparkle/Log.h"
+#include "Sparkle/Window.h"
+#include "Sparkle/Engine.h"
 
 #include <sys/syslog.h>
 
@@ -15,10 +15,10 @@ namespace Sparkle {
     }
 
     Window::~Window() {
-        shutdown();
+        Shutdown();
     }
 
-    bool Window::init(const std::optional<WindowData> &data) {
+    bool Window::Init(const std::optional<WindowData> &data) {
 
         if (data) {
             m_data = *data;
@@ -36,7 +36,7 @@ namespace Sparkle {
         m_scale = SDL_GetDisplayContentScale(SDL_GetPrimaryDisplay());
         m_window = SDL_CreateWindow("Dear ImGui SDL3+Vulkan example", (int)(1280 * m_scale), (int)(720 * m_scale), flags);
         if (!m_window) {
-            LOG_ERROR("SDL_CreateWindow Error: {}\n", SDL_GetError());
+            SK_LOG_ERROR("SDL_CreateWindow Error: {}\n", SDL_GetError());
             SDL_Quit();
             return false;
         }
@@ -47,7 +47,7 @@ namespace Sparkle {
         return true;
     }
 
-    void Window::shutdown() {
+    void Window::Shutdown() {
         if (m_window) {
             SDL_DestroyWindow(m_window);
             m_window = nullptr;

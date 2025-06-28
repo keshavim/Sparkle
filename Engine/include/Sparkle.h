@@ -5,11 +5,11 @@
 #ifndef SPARKLE_H
 #define SPARKLE_H
 
-#include "Sparkle/engine.h"
-#include "Sparkle/log.h"
-#include "Sparkle/engine.h"
-#include "Sparkle/input_system.h"
-#include "Sparkle/imguilayer.h"
+#include "Sparkle/Engine.h"
+#include "Sparkle/Log.h"
+#include "Sparkle/Engine.h"
+#include "Sparkle/InputSystem.h"
+#include "Sparkle/ImGuiLayer.h"
 
 
 #endif //SPARKLE_H

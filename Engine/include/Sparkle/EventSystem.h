@@ -5,7 +5,7 @@
 #ifndef EVENT_H
 #define EVENT_H
 
-#include "Sparkle/events.h"
+#include "Sparkle/Events.h"
 #include <SDL3/SDL.h>
 #include <vector>
 #include <functional>
@@ -17,16 +17,16 @@ namespace Sparkle {
     class EventSystem {
     public:
         // Register a callback to receive engine events
-        void register_callback(EventType type, const EventCallbackFn &callback);
+        void RegisterCallback(EventType type, const EventCallbackFn &callback);
 
         // Poll SDL events, convert to Sparkle events, and dispatch
-        void poll_events(const SDL_Event &sdl_event);
+        void PollEvents(const SDL_Event &sdl_event);
 
     private:
         std::unordered_map<EventType, EventCallbackFn> callbacks_;
 
         // Dispatch the event to the registered callback for its type.
-        void dispatch(Event &event);
+        void Dispatch(Event &event);
     };
 }
 

@@ -7,7 +7,7 @@
 
 #include <vector>
 #include <memory>
-#include "Sparkle/layer.h"
+#include "Sparkle/Layer.h"
 
 namespace Sparkle {
     // LayerStack manages layers and overlays.
