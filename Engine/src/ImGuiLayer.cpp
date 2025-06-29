@@ -13,9 +13,12 @@
 
 #include "Sparkle/Log.h"
 
-
 namespace Sparkle {
-    ImGuiLayer::ImGuiLayer() : Layer("ImGuiLayer") {
+    ImGuiLayer::ImGuiLayer(bool show_demo, bool show_another_window, ImVec4 clear_color)
+        : Layer("ImGuiLayer"),
+          show_demo_window(show_demo),
+          show_another_window(show_another_window),
+          clear_color(clear_color) {
         SetupVulkanWindow();
     }
 
@@ -26,9 +29,6 @@ namespace Sparkle {
         const VulkanContext &m_Context = Engine::Get().get_renderer().getContext();
         SDL_Window *window = Engine::Get().get_window().GetSDLWindow();
 
-
-
-
         // Setup Dear ImGui context
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
@@ -36,6 +36,7 @@ namespace Sparkle {
         (void) io;
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad; // Enable Gamepad Controls
+
 
         // Setup Dear ImGui style
         ImGui::StyleColorsDark();
@@ -83,21 +84,17 @@ namespace Sparkle {
         //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf");
         //ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf");
         //IM_ASSERT(font != nullptr);
-
     }
 
 
     void ImGuiLayer::on_detach() {
         const VulkanContext &m_Context = Engine::Get().get_renderer().getContext();
-
-
+        ImGui_ImplVulkanH_DestroyWindow(m_Context.instance, m_Context.device, &mainWindowData,
+                                        m_Context.allocator);
 
         ImGui_ImplVulkan_Shutdown();
         ImGui_ImplSDL3_Shutdown();
         ImGui::DestroyContext();
-        ImGui_ImplVulkanH_DestroyWindow(m_Context.instance, m_Context.device, &mainWindowData,
-                                        m_Context.allocator);
-
     }
 
     void ImGuiLayer::on_update(float dt) {
@@ -105,12 +102,11 @@ namespace Sparkle {
         SDL_Window *window = Engine::Get().get_window().GetSDLWindow();
 
 
-
         // Resize swap chain?
         int fb_width, fb_height;
         SDL_GetWindowSize(window, &fb_width, &fb_height);
         if (fb_width > 0 && fb_height > 0 && (
-                m_Context.swapChainRebuild || m_Context.mainWindowData.Width != fb_width || m_Context.mainWindowData.
+                m_Context.swapChainRebuild || mainWindowData.Width != fb_width || mainWindowData.
                 Height != fb_height)) {
             ImGui_ImplVulkan_SetMinImageCount(m_Context.minImageCount);
             ImGui_ImplVulkanH_CreateOrResizeWindow(m_Context.instance, m_Context.physicalDevice, m_Context.device,
@@ -119,7 +115,7 @@ namespace Sparkle {
                                                    m_Context.minImageCount);
             mainWindowData.FrameIndex = 0;
             m_Context.swapChainRebuild = false;
-                }
+        }
 
         // Start the Dear ImGui frame
         ImGui_ImplVulkan_NewFrame();
@@ -149,7 +145,7 @@ namespace Sparkle {
                 counter++;
             ImGui::SameLine();
             ImGui::Text("counter = %d", counter);
- ImGuiIO &io = ImGui::GetIO();
+            ImGuiIO &io = ImGui::GetIO();
             ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
             ImGui::End();
         }
@@ -163,8 +159,9 @@ namespace Sparkle {
                 show_another_window = false;
             ImGui::End();
         }
+    }
 
-        // Rendering
+    void ImGuiLayer::on_render() {
         ImGui::Render();
         ImDrawData *draw_data = ImGui::GetDrawData();
         const bool is_minimized = (draw_data->DisplaySize.x <= 0.0f || draw_data->DisplaySize.y <= 0.0f);
@@ -177,13 +174,11 @@ namespace Sparkle {
             FrameRender(draw_data);
             FramePresent();
         }
-
     }
 
 
     void ImGuiLayer::on_event(Event &event) {
-        // Forward SDL events to ImGui if needed
-        // ImGui_ImplSDL3_ProcessEvent(&sdl_event);
+
     }
 
 
@@ -248,7 +243,6 @@ namespace Sparkle {
     void ImGuiLayer::FrameRender(ImDrawData *draw_data) {
         VulkanContext &m_Context = Engine::Get().get_renderer().getContext();
         ImGui_ImplVulkanH_Window *wd = &mainWindowData;
-
 
 
         VkSemaphore image_acquired_semaphore = wd->FrameSemaphores[wd->SemaphoreIndex].ImageAcquiredSemaphore;
@@ -316,7 +310,6 @@ namespace Sparkle {
     void ImGuiLayer::FramePresent() {
         VulkanContext &m_Context = Engine::Get().get_renderer().getContext();
         ImGui_ImplVulkanH_Window *wd = &mainWindowData;
-
 
 
         if (m_Context.swapChainRebuild)

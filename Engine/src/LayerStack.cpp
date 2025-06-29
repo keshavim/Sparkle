@@ -40,6 +40,10 @@ namespace Sparkle {
         for (auto &layer: m_layers)
             layer->on_update(dt);
     }
+    void LayerStack::on_render() const {
+        for (auto &layer: m_layers)
+            layer->on_render();
+    }
 
     void LayerStack::on_event(Event &event) {
         //update from top to bottom

@@ -7,6 +7,7 @@
 #include "Sparkle/ImGuiLayer.h"
 #include "Sparkle/Log.h"
 #include "Sparkle/InputSystem.h"
+#include "backends/imgui_impl_sdl3.h"
 
 
 namespace Sparkle {
@@ -30,7 +31,7 @@ namespace Sparkle {
 
         m_renderer.Init();
 
-        pushOverlay(new ImGuiLayer());
+        pushOverlay(new ImGuiLayer(true, false, ImVec4(0.45f, 0.55f, 0.60f, 1.00f)));
 
         register_events();
     }
@@ -69,11 +70,6 @@ namespace Sparkle {
 
     void Engine::run() {
 
-        // Our state, will move
-        // bool show_demo_window = true;
-        // bool show_another_window = false;
-        // ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-
         m_is_running = true;
         u64 last_time = SDL_GetTicks();
 
@@ -81,6 +77,8 @@ namespace Sparkle {
         while (m_is_running) {
             SDL_Event sdl_event;
             while (SDL_PollEvent(&sdl_event)) {
+                //may try to change to use oure events
+                ImGui_ImplSDL3_ProcessEvent(&sdl_event);
                 m_event_system.PollEvents(sdl_event);
             }
 
@@ -88,16 +86,14 @@ namespace Sparkle {
             const f32 delta_time = static_cast<f32>(now - last_time) / 1000.0f;
             last_time = now;
 
-
-
             m_renderer.Render();
 
-            on_update(delta_time);
-        }
+            m_layers.on_update(delta_time);
 
+            m_layers.on_render();
+        }
         VkResult err = vkDeviceWaitIdle(m_renderer.getContext().device);
         Renderer::check_vk_result(err);
-
     }
 
 

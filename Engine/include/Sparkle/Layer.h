@@ -18,17 +18,27 @@ namespace Sparkle {
 
         virtual ~Layer() = default;
 
+        //called when layer is added to the stack
+        //used for init
         virtual void on_attach() {
         }
-
+        //called when removed from stack
         virtual void on_detach() {
         }
+        //used for handeling events, called first in loop
+        virtual void on_event(Event &event) {
+        }
 
+
+        //used for updateing logic in the layer. called second in loop
         virtual void on_update(float dt) {
         }
 
-        virtual void on_event(Event &event) {
+        //used for rendering, called third in loop
+        virtual void on_render() {
+
         }
+
 
         const std::string &name() const { return m_name; }
 

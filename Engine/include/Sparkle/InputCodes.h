@@ -9,7 +9,7 @@
 
 namespace Sparkle {
     // Wrapper for SDL scancodes (physical keyboard layout)
-    enum class Key {
+    enum class Key : int {
         Unknown = SDL_SCANCODE_UNKNOWN,
         A = SDL_SCANCODE_A,
         B = SDL_SCANCODE_B,
@@ -96,7 +96,11 @@ namespace Sparkle {
         PageUp = SDL_SCANCODE_PAGEUP,
         PageDown = SDL_SCANCODE_PAGEDOWN
         // ...add more as needed...
+
+
     };
+
+
 
 
     // Wrapper for SDL mouse buttons

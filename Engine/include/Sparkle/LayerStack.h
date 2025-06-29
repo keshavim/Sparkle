@@ -30,6 +30,9 @@ namespace Sparkle {
         // Call on_update for all layers and overlays
         void on_update(float dt) const;
 
+        //call on_render on oll layer and overlays
+        void on_render() const;
+
         // Call on_event for all layers and overlays (from top to bottom)
         void on_event(Event &event);
 

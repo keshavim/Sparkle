@@ -28,9 +28,6 @@ namespace Sparkle {
         uint32_t minImageCount = 2;
         bool swapChainRebuild = false;
 
-        //temporery
-        ImGui_ImplVulkanH_Window mainWindowData;
-
     };
     class Renderer {
     public:
@@ -40,25 +37,14 @@ namespace Sparkle {
 
         VulkanContext &getContext() {return m_Context;}
 
-
+        //static function for checking vulken errors
         static void check_vk_result(VkResult err);
 
     private:
-        //need to clean up these functions
-        //still useing elements form example
+        //vulken specific
         static bool IsExtensionAvailable(const ImVector<VkExtensionProperties> &properties, const char *extension);
         void SetupVulkan(ImVector<const char *> instance_extensions);
-
-
-        void FrameRender(ImGui_ImplVulkanH_Window *wd, ImDrawData *draw_data);
-        void FramePresent(ImGui_ImplVulkanH_Window *wd);
-
         void CleanupVulkan();
-
-        //this part will move to imgui layer
-        void SetupVulkanWindow(ImGui_ImplVulkanH_Window *wd, VkSurfaceKHR surface, int width, int height);
-        void CleanupVulkanWindow();
-
 
     private:
         VulkanContext m_Context;
