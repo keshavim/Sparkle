@@ -36,6 +36,8 @@ namespace Sparkle {
         (void) io;
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad; // Enable Gamepad Controls
+        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+        io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
 
         // Setup Dear ImGui style
@@ -286,6 +288,9 @@ namespace Sparkle {
 
         // Record dear imgui primitives into command buffer
         ImGui_ImplVulkan_RenderDrawData(draw_data, fd->CommandBuffer);
+
+        ImGui::UpdatePlatformWindows();
+        ImGui::RenderPlatformWindowsDefault();
 
         // Submit command buffer
         vkCmdEndRenderPass(fd->CommandBuffer); {
