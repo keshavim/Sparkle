@@ -42,6 +42,7 @@ namespace Sparkle {
         // Accessors for systems
         static Engine& Get() {return *s_instance;}
         Window& get_window() { return m_window; }
+        Renderer& get_renderer() { return m_renderer; }
 
     private:
         void on_update(f32 delta_time);

@@ -14,8 +14,8 @@ namespace Sparkle {
     //struct containing window data
     struct WindowData {
         std::string title = "window";
-        i32 width = 800;
-        i32 height = 600;
+        i32 width = 1280;
+        i32 height = 720;
         bool fullscreen = false;
         bool resizable = true;
         bool vsync = true;

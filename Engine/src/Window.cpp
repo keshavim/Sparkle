@@ -34,7 +34,7 @@ namespace Sparkle {
 
         // Create window with Vulkan graphics context
         m_scale = SDL_GetDisplayContentScale(SDL_GetPrimaryDisplay());
-        m_window = SDL_CreateWindow("Dear ImGui SDL3+Vulkan example", (int)(1280 * m_scale), (int)(720 * m_scale), flags);
+        m_window = SDL_CreateWindow(m_data.title.c_str(), m_data.width * m_scale, m_data.height * m_scale, flags);
         if (!m_window) {
             SK_LOG_ERROR("SDL_CreateWindow Error: {}\n", SDL_GetError());
             SDL_Quit();

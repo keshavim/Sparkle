@@ -36,9 +36,16 @@ namespace Sparkle {
     public:
         void Init();
         void Cleanup();
-        void Render(bool show_demo_window, bool show_another_window, ImVec4 clear_color);
+        void Render();
+
+        VulkanContext &getContext() {return m_Context;}
+
+
+        static void check_vk_result(VkResult err);
 
     private:
+        //need to clean up these functions
+        //still useing elements form example
         static bool IsExtensionAvailable(const ImVector<VkExtensionProperties> &properties, const char *extension);
         void SetupVulkan(ImVector<const char *> instance_extensions);
 
@@ -52,7 +59,6 @@ namespace Sparkle {
         void SetupVulkanWindow(ImGui_ImplVulkanH_Window *wd, VkSurfaceKHR surface, int width, int height);
         void CleanupVulkanWindow();
 
-        static void check_vk_result(VkResult err);
 
     private:
         VulkanContext m_Context;
